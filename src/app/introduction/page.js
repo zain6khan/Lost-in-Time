@@ -1,18 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function IntroductionPage() {
+  const audioRef = useRef(null);
+
   useEffect(() => {
-    // Play background audio when the page loads
-    const audio = new Audio('/introduction.mp3'); // Replace with your audio file
-    audio.loop = false; // Make the audio loop
-    audio.play();
+    // Initialize the audio object only once
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/introduction.mp3');
+      audioRef.current.loop = false;
+      audioRef.current.preload = 'auto'; // Preload the audio file
+    }
+
+    // Attempt to play the audio
+    const playAudio = async () => {
+      try {
+        const playPromise = audioRef.current.play();
+
+        // Handle the play promise
+        if (playPromise !== undefined) {
+          await playPromise;
+          console.log('Audio playback started successfully');
+        }
+      } catch (err) {
+        console.log('Audio playback failed:', err);
+        // Optional: Provide user feedback or fallback behavior here
+      }
+    };
+
+    playAudio();
 
     return () => {
-      audio.pause();
-      audio.currentTime = 0; // Reset audio when the component unmounts
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset audio when unmounting
+      }
     };
   }, []);
 
@@ -20,7 +44,7 @@ export default function IntroductionPage() {
     <div
       className="min-h-screen flex items-center justify-center"
       style={{
-        backgroundImage: "url('/futuristic_watch.jpeg')", // Replace with your screen-like image
+        backgroundImage: "url('/futuristic_watch.jpeg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -63,7 +87,8 @@ export default function IntroductionPage() {
             textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)', // Subtle text shadow
           }}
         >
-          Using advanced quantum tunneling technology, I managed to send this special device to you in 2024. Even though I can't be there myself, his wearable device will allow us to communicate across time and enable you to travel to different historical moments.        </p>
+          Using advanced quantum tunneling technology, I managed to send this special device to you in 2024. Even though I can't be there myself, this wearable device will allow us to communicate across time and enable you to travel to different historical moments.
+        </p>
         <p
           className="text-lg mb-8 text-center"
           style={{

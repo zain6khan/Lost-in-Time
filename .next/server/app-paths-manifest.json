@@ -1,0 +1,6 @@
+{
+  "/stage/[id]/page": "app/stage/[id]/page.js",
+  "/completion/page": "app/completion/page.js",
+  "/introduction/page": "app/introduction/page.js",
+  "/page": "app/page.js"
+}
